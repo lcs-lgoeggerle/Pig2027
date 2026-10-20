@@ -50,6 +50,9 @@ struct PigView: View {
     // A message that tells the players what just happened.
     @State var message: String = "Player 1 goes first. Click Roll to start."
 
+    // How many times the current player has rolled on this turn.
+    @State var rollsThisTurn: Int = 0
+    
     // MARK: - Computed properties
 
     var body: some View {
@@ -104,7 +107,7 @@ struct PigView: View {
                 .font(.system(size: 120))
                 .foregroundStyle(turnColor)
 
-            Text("Turn total: \(turnTotal)")
+            Text("Turn total: \(turnTotal)      Rolls: \(rollsThisTurn)")
                 .font(.title2)
                 .bold()
                 .monospacedDigit()
@@ -152,7 +155,8 @@ struct PigView: View {
 
         // Pick a random whole number from 1 to 6, just like a real die.
         let roll: Int = Int.random(in: 1...6)
-
+        rollsThisTurn += 1
+        
         // Show the matching die face. For a roll of 4, the symbol is "die.face.4.fill".
         dieSymbol = "die.face.\(roll).fill"
 
@@ -183,6 +187,7 @@ struct PigView: View {
 
     // Passes the turn to the other player.
     func switchPlayer() {
+        rollsThisTurn = 0
         if currentPlayer == 1 {
             currentPlayer = 2
             turnColor = playerTwoColor
